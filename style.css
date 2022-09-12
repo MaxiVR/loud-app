@@ -18,8 +18,35 @@ body{
     width: 100%
 }
 
-.artista{
-    margin: 0 50px 0 50px;
+.cover{
+    cursor: pointer;
+    max-height: 275px;
+    border-radius: 10%;
+}
+
+#container-track-list{
+    margin: 0 25% 0 25%;
+    border-style: double;
+    padding: 10px;
+    background-image: linear-gradient(to top, #0ba360 0%, #066b4b 100%);
+    display: none;
+}
+
+#cover-track-list{
+    margin: auto;
+}
+
+.paginar-playlist{
+    display: none;
+}
+
+#track-list{
+    height: 500px;
+}
+
+ol{
+    overflow-y: scroll;
+    height: inherit;
 }
 
 a{
@@ -33,15 +60,23 @@ h1{
 
 .navbar-nav{
     flex: auto;
-
 }
 
-.contenedor {
+.container-data{
 	width: fit-content;
-	margin: 40px auto 100px auto;
+	margin: 40px auto 40px auto;
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
-	gap: 40px;
+	gap: 25px;
+}
+
+.paginar{
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.btn-playlist{
+    display: none;
 }
 
 :root {
@@ -218,3 +253,17 @@ a {
     100%    {width: 100%;}
 }
 
+
+@media (max-width: 850px){
+
+    .categories{
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+}
+@media (max-width: 650px){
+
+    .categories{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}    

@@ -23,8 +23,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link" href="#contenedor">Categorias</a>
-            <a class="nav-link" href="#">Pricing</a>
+            <a class="nav-link" href="#categories" id="navCategorie">Categorias</a>
+            <a class="nav-link" href="#">Albums</a>
           </div>
           <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -55,13 +55,23 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col">
-          <div class="contenedor" id="contenedor"></div>
+          <div class="container-data" id="container-data"></div>
+          <div class="paginar btn-categories">
+              <button class="btn btn-primary" id="btnAnterior">Anterior</button>
+              <button class="btn btn-primary" id="btnSiguiente">Siguiente</button>
+          </div>
+          <div class="paginar btn-playlist">
+            <button class="btn btn-info" id="btnAnteriorPlay">Anterior</button>
+            <button class="btn btn-info" id="btnSiguientePlay">Siguiente</button>
+        </div>
         </div>
       </div>
     </div>
-    <div class="paginacion">
-      <button class="btn btn-primary" id="btnAnterior">Anterior</button>
-      <button class="btn btn-primary" id="btnSiguiente">Siguiente</button>
+    <div class="container-fluid">
+      <div class="row" id="container-track-list">
+        <div class="col" id="cover-track-list"></div>
+        <div class="col" id="track-list"></div>
+      </div>
     </div>
     <section class="player">
       <div class="header">
@@ -118,9 +128,6 @@
 
   <script src="https://kit.fontawesome.com/7d35781f0a.js" crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-
-
-
   <script src='script.js'></script>
 </body>
 

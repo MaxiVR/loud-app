@@ -68,23 +68,6 @@ function cargarCover(data) {
   document.getElementById("contenedor").innerHTML = cover;
 }
 
-const getTrackByPlaylist = async () => {
-  fetch(`https://api.spotify.com/v1/playlists/37i9dQZF1DWZU5DGR2xCSH`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      'Authorization': "Bearer " + window.localStorage.getItem('token'),
-      'Host': "api.spotify.com",
-    }
-  }).then(function (resp){
-	return resp.json();
-  })
-  .then(function (data) {
-    console.log("tracks", data.tracks);
-  })
-};
-
- 
 const getPlaylist = async () => {
   fetch(`https://api.spotify.com/v1/browse/categories/toplists`, {
     method: "GET",
@@ -101,8 +84,8 @@ const getPlaylist = async () => {
   })
 };
 
-const getCategorias = async () => {
-  fetch(`https://api.spotify.com/v1/browse/categories?offset=${offSet}&limit=12`, {
+const getTracksByPlaylist = async (idTrackList, urlCover) => {
+  fetch(`https://api.spotify.com/v1/playlists/${idTrackList}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -113,60 +96,124 @@ const getCategorias = async () => {
 	return resp.json();
   })
   .then(function (data) {
-    console.log("categorias",data);
-    let cover = "";
-    data.categories.items.forEach(item => { 
-    cover += `<div class="categoria">
-                <a ><img class="cover" id='${item.id}' src='${item.icons[0].url}'></a>
-                <h6>${item.name}</h6>
-              </div>
-              `;
-              
-    document.getElementById("contenedor").innerHTML = cover;        
-    
-    const categorias = document.querySelectorAll(".cover");
-      for (let i = 0; i < categorias.length; i++) {
-        categorias[i].addEventListener("click", (e) => {
-          getPlaylistByCategoria(e.target.id);
-          console.log(e.target.id);
-        })
-      }
+    let tracks = "";
+    data.tracks.items.forEach((item) => {
+      tracks += `<li>${item.track.name}</li>`;
     })
+    let cover = `<img class="img-fluid cover" src='${urlCover}'>`;
+    let tracksList = `<ol>${tracks}</ol>`;
+    document.getElementById("container-track-list").style.display = "flex";
+    document.getElementById("cover-track-list").innerHTML = cover;
+    document.getElementById("track-list").innerHTML = tracksList; 
+  })
+};
+
+const getPlaylistByCategoria = async (idCategoria) => {
+  fetch(`https://api.spotify.com/v1/browse/categories/${idCategoria}/playlists?offset=${offSetPlay}&limit=12`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      'Authorization': "Bearer " + window.localStorage.getItem('token'),
+      'Host': "api.spotify.com",
+    }
+  }).then(function (resp){
+	return resp.json();
+  })
+  .then(function (data) {
+    document.getElementsByClassName("btn-playlist")[0].style.display = "block";
+    document.getElementsByClassName("btn-categories")[0].style.display = "none";
+    idCat = idCategoria;
+    console.log(data);
+    total = data.playlists.total;
+    offSetCat = 0;
+    let coverPlaylists = "";
+    data.playlists.items.forEach(item => {
+      coverPlaylists += `<div class="playlist">
+                            <img  class="img-fluid cover" id='${item.id}' src='${item.images[0].url}'>
+                          </div>`;
+    })
+    document.getElementById("container-data").innerHTML = coverPlaylists;   
+    const playlists = document.querySelectorAll(".cover");
+    for (let i = 0; i < playlists.length; i++) {
+      playlists[i].addEventListener("click", (e) => {
+        getTracksByPlaylist(e.target.id, e.target.currentSrc);
+      })
+    }
+  })
+};
+
+
+const getCategorias = async () => {
+  fetch(`https://api.spotify.com/v1/browse/categories?offset=${offSetCat}&limit=12`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      'Authorization': "Bearer " + window.localStorage.getItem('token'),
+      'Host': "api.spotify.com",
+    }
+  }).then(function (resp){
+	return resp.json();
+  })
+  .then(function (data) {
+    document.getElementsByClassName("btn-playlist")[0].style.display = "none";
+    document.getElementsByClassName("btn-categories")[0].style.display = "block";
+    offSetPlay = 0;
+    let coverCategorie = "";
+    data.categories.items.forEach(item => { 
+    coverCategorie += `<div class="col categoria">
+                          <img class="img-fluid cover" id='${item.id}' src='${item.icons[0].url}'>
+                          <h6>${item.name}</h6>
+                       </div>`;   
+    })
+    document.getElementById("container-data").innerHTML = coverCategorie;        
+    const categorias = document.querySelectorAll(".cover");
+    for (let i = 0; i < categorias.length; i++) {
+      categorias[i].addEventListener("click", (e) => {
+        getPlaylistByCategoria(e.target.id);
+      })
+    }
   })
 }
 
-
 const btnAnterior = document.getElementById("btnAnterior");
 const btnSiguiente = document.getElementById("btnSiguiente");
-let offSet = 0;
+const btnAnteriorPlay = document.getElementById("btnAnteriorPlay");
+const btnSiguientePlay = document.getElementById("btnSiguientePlay");
+let offSetCat = 0;
+let offSetPlay = 0;
+let idCat;
+let total;
 
 btnSiguiente.addEventListener('click', () => {
-  offSet += 12;
-  getCategorias();
-})
-
+  if (offSetCat <= 36){
+    offSetCat += 12;
+     getCategorias();   
+   }
+  });  
 btnAnterior.addEventListener('click', () => {
-  offSet -= 12;
-  getCategorias();
-})
+  if (offSetCat >= 12){
+    offSetCat -= 12;
+    getCategorias();
+  }
+});
 
+btnSiguientePlay.addEventListener('click', () => {
+  console.log(total);
+  console.log(offSetPlay);
+  if (offSetPlay <=  (total - 12)){
+    offSetPlay += 12;
+    getPlaylistByCategoria(idCat);   
+   }
+});
 
-const getPlaylistByCategoria = async (idCategoria) => {
-  fetch(`https://api.spotify.com/v1/browse/categories/${idCategoria}/playlists`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      'Authorization': "Bearer " + window.localStorage.getItem('token'),
-      'Host': "api.spotify.com",
-    }
-  }).then(function (resp){
-	return resp.json();
-  })
-  .then(function (data) {
-    console.log("catPlay", data);
-    
-  })
-};
+btnAnteriorPlay.addEventListener('click', () => {
+  console.log(total);
+  console.log(offSetPlay);
+  if (offSetPlay >= 12){
+    offSetPlay -= 12;
+    getPlaylistByCategoria(idCat);   
+   }
+});
 
 const searchAlbum = async (value, artist, album, track) => {
   fetch(
@@ -195,6 +242,7 @@ const search = document.getElementById("search");
 const artist = document.getElementById("type-artist");
 const album = document.getElementById("type-album");
 const track = document.getElementById("type-track");
+const navCategorie = document.getElementById("navCategorie");
 
 //cargarAlbums();
 form.addEventListener("submit", (e) => {
@@ -208,11 +256,11 @@ form.addEventListener("submit", (e) => {
   }
 });
 
-//getPlaylistByCategoria();
+navCategorie.addEventListener("click", () => getCategorias()) 
 //getPlaylist();
 //getTrackByPlaylist();
 
 window.onload = () =>{
   getToken();
-  getCategorias();
 }
+getCategorias();

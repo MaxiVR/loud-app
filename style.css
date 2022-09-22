@@ -9,7 +9,7 @@
 body{
     background-image:  linear-gradient(to top, #434343 0%, black 100%);
     background-attachment: fixed;
-    color: black;
+    color: rgb(95, 31, 31);
 }
 
 #navbar{
@@ -58,13 +58,17 @@ h1{
     font-family: Frijole, cursive;
 }
 
+h6{
+    width: 100%;
+}
+
 .navbar-nav{
     flex: auto;
 }
 
 .container-data{
 	width: fit-content;
-	margin: 40px auto 40px auto;
+	margin: 100px auto 40px auto;
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	gap: 25px;
@@ -79,7 +83,40 @@ h1{
     display: none;
 }
 
-:root {
+#formSearch{
+    display: none;
+    margin: 100px 20% 10px 20%;
+    padding: 15px;
+    border-style: double;
+}
+
+.inputs{
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: rgb(7 96 46);
+}
+
+.inputs::placeholder{
+    color: black;
+    font-weight: bold;
+}
+
+
+#input-search{
+    width: 100%;
+}
+
+.opcional{
+    width: 49.5%;
+}
+
+#btn-submit{
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* :root {
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
 
@@ -247,23 +284,23 @@ a {
     animation: timer 30s linear 0.1s;
 }
 
-/*      keyframes   */
+/*      keyframes   
 @keyframes timer {
     0%      {width: 0%;}
     100%    {width: 100%;}
-}
+} */
 
 
 @media (max-width: 850px){
 
-    .categories{
+    .container-data{
         grid-template-columns: repeat(3, 1fr);
     }
     
 }
 @media (max-width: 650px){
 
-    .categories{
+    .container-data{
         grid-template-columns: repeat(2, 1fr);
     }
 }    

@@ -9,7 +9,7 @@
 body{
     background-image:  linear-gradient(to top, #434343 0%, black 100%);
     background-attachment: fixed;
-    color: rgb(95, 31, 31);
+    color: rgb(144 113 254);
 }
 
 #navbar{
@@ -59,7 +59,7 @@ h1{
 }
 
 h6{
-    width: 100%;
+    width: 275px;
 }
 
 .navbar-nav{
@@ -74,6 +74,23 @@ h6{
 	gap: 25px;
 }
 
+#container-result-tracks{
+    width: fit-content;
+	margin: 10px auto 40px auto;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 25px;
+}
+
+.tracks{
+    border-style: groove;
+}
+
+.preview-track{
+    height: 10px;
+    margin-top: 5px;
+}
+
 .paginar{
     margin-bottom: 20px;
     text-align: center;
@@ -84,7 +101,6 @@ h6{
 }
 
 #formSearch{
-    display: none;
     margin: 100px 20% 10px 20%;
     padding: 15px;
     border-style: double;
@@ -296,6 +312,11 @@ a {
     .container-data{
         grid-template-columns: repeat(3, 1fr);
     }
+
+    #container-result-tracks{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
     
 }
 @media (max-width: 650px){

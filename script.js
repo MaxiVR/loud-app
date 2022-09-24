@@ -4,8 +4,14 @@ const artistInput = document.getElementById("type-artist");
 const albumInput = document.getElementById("type-album");
 const trackInput = document.getElementById("type-track");
 
-const containerResulSearh =  document.getElementById("container-resul");
-const containerData = document.getElementById("container-data");;
+
+const containerCategoria = document.getElementById("container-data-categoria");
+const containerLanzamientos = document.getElementById("container-data-lanzamientos");
+const containerTracksList = document.getElementById("container-track-list");
+const containerSearch = document.getElementById("contariner-buscador");
+
+const containerResulSearh =  document.getElementById("container-result");
+const containerResultTracks = document.getElementById("container-result-tracks");
 
 const btnsPageCategories = document.getElementById("btns-pag-categories");
 const btnAnterior = document.getElementById("btnAnterior");
@@ -53,6 +59,7 @@ const getToken = async () => {
 };
 
 function showAlbums(data) {
+  containerResultTracks.style.display = "none";
   let cover = "";
   data.albums.items.forEach(item => {
     cover += `<div class='artista'>
@@ -64,8 +71,8 @@ function showAlbums(data) {
 }
 
 function showArtists(data) {
+  containerResultTracks.style.display = "none";
   let cover = "";
-
   data.artists.items.forEach(item => {
     cover += `<div class='artista'>
                 <img class="cover" src='${item?.images[1]?.url}'>
@@ -73,6 +80,23 @@ function showArtists(data) {
               </div>`;
   });
   containerResulSearh.innerHTML = cover;
+}
+
+function showTracks (data){
+  console.log(data);
+  containerResulSearh.style.display = "none";
+  containerResultTracks.style.display = "grid";
+  let tracks = "";
+  data.tracks.items.forEach(item => {
+    tracks += `<div class="tracks" id='${item.id}'>
+                  <img class="cover track"  src='${item?.album?.images[2]?.url}'><h7>${item?.name}</h7><br>
+                  <audio controls class="preview-track">
+                      <source src="${item?.preview_url}" type="audio/mpeg">
+                      Tu navegador no soporta elentos de audio.
+                  </audio>
+              </div>`
+  })
+  containerResultTracks.innerHTML = tracks;
 }
 
 const getPlaylist = async () => {
@@ -109,7 +133,7 @@ const getTracksByPlaylist = async (idTrackList, urlCover) => {
     })
     let cover = `<img class="img-fluid cover" src='${urlCover}'>`;
     let tracksList = `<ol>${tracks}</ol>`;
-    document.getElementById("container-track-list").style.display = "flex";
+    containerTracksList.style.display = "flex";
     document.getElementById("cover-track-list").innerHTML = cover;
     document.getElementById("track-list").innerHTML = tracksList;
   })
@@ -138,7 +162,7 @@ const getPlaylistByCategoria = async (idCategoria) => {
                             <img  class="img-fluid cover" id='${item.id}' src='${item.images[0].url}'>
                           </div>`;
     })
-    containerData.innerHTML = coverPlaylists;
+    containerCategoria.innerHTML = coverPlaylists;
     const playlists = document.querySelectorAll(".cover");
     for (let i = 0; i < playlists.length; i++) {
       playlists[i].addEventListener("click", (e) => {
@@ -162,10 +186,11 @@ const getCategorias = async () => {
   .then(function (data) {
     console.log(data);
     categorie = true;
-    containerData.style.display = "grid";
+    containerCategoria.style.display = "grid";
+    containerLanzamientos.style.display = "none";
+    containerSearch.style.display = "none";
     btnsPagePlaylist.style.display = "none";
     containerResulSearh.style.display = "none";
-    form.style.display = "none";
     btnsPageCategories.style.display = "block";
     totalElements = data.categories.total;
     offSetPlay = 0;
@@ -177,7 +202,7 @@ const getCategorias = async () => {
                           <h6>${item.name}</h6>
                        </div>`;
     })
-    containerData.innerHTML = coverCategorie;
+    containerCategoria.innerHTML = coverCategorie;
     const categorias = document.querySelectorAll(".cover");
     for (let i = 0; i < categorias.length; i++) {
       categorias[i].addEventListener("click", (e) => {
@@ -220,23 +245,25 @@ const getLanzamientos = async () => {
 	return resp.json();
   })
   .then(function (data) {
+    btnsPagePlaylist.style.display = "none";
+    btnsPageCategories.style.display = "block";
+    containerCategoria.style.display = "none";
+    containerSearch.style.display = "none"
     containerResulSearh.style.display = "none";
-    containerData.style.display = "grid";
-    form.style.display = "none";
+    containerLanzamientos.style.display = "grid";
+    containerTracksList.style.display = "none";
     categorie = false;
     console.log(data);
     totalElements = data.albums.total;
-    btnsPagePlaylist.style.display = "none";
-    btnsPageCategories.style.display = "block";
     offSetCat = 0;
-    let coverCategorie = "";
+    let coverLanzamientos = "";
     data.albums.items.forEach(item => {
-    coverCategorie += `<div class="container lanzamiento">
+    coverLanzamientos += `<div class="container lanzamiento">
                           <img class="img-fluid cover" id='${item.id}' src='${item.images[0].url}'>
                           <h6>${item.name}</h6>
                        </div>`;
     })
-    containerData.innerHTML = coverCategorie;
+    containerLanzamientos.innerHTML = coverLanzamientos;
     const lanzamientos = document.querySelectorAll(".cover");
     for (let i = 0; i < lanzamientos.length; i++) {
       lanzamientos[i].addEventListener("click", (e) => {
@@ -264,16 +291,22 @@ const search = async (value, artist, album, track, year, genero) => {
       if (data?.albums) {
         console.log("album");
         Toastify({
-          text: "Cantidad de resultados que concinciden con tu busquedad: " + data?.albums?.total,
+          text: "Cantidad de resultados que coincinciden con tu busquedad: " + data?.albums?.total,
           duration: 5000
           }).showToast();
         showAlbums(data); 
-      }else{
+      }else if (data?.artists){
         Toastify({
-          text: "Cantidad de resultados que concinciden con tu busquedad: " + data?.artists?.total,
+          text: "Cantidad de resultados que coincinciden con tu busquedad: " + data?.artists?.total,
           duration: 5000
           }).showToast();
         showArtists(data);
+      }else{
+        Toastify({
+          text: "Cantidad de resultados que coincinciden con tu busquedad: " + data?.tracks?.total,
+          duration: 5000
+          }).showToast();
+        showTracks(data);
       }
     }).catch(function(error){
       console.log(error)
@@ -323,10 +356,12 @@ btnAnteriorPlay.addEventListener('click', () => {
 });
 
 function showSearch (){
-  form.style.display = "block"
+  containerSearch.style.display = "block"
   btnsPageCategories.style.display = "none";
   btnsPagePlaylist.style.display = "none";
-  containerData.style.display = "none";
+  containerCategoria.style.display = "none";
+  containerLanzamientos.style.display = "none";
+  containerTracksList.style.display = "none"; 
 }
 
 form.addEventListener("submit", (e) => {

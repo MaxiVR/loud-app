@@ -14,6 +14,7 @@
 </head>
 
 <body>
+
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
       <div class="container-fluid">
@@ -33,7 +34,39 @@
     </nav>
   </header>
   <main>
-    <div class="container-fluid text-center">
+
+    <section class="container-fluid" id="container-categoria">
+      <div class="row">
+        <div class="col">
+          <div class="container-data" id="container-data-categoria"></div>
+          <div class="paginar" id="btns-page-playlist">
+            <button class="btn btn-info" id="btnAnteriorPlay">Anterior</button>
+            <button class="btn btn-info" id="btnSiguientePlay">Siguiente</button>
+          </div>
+          <div class="container-fluid">
+            <div class="row" id="container-track-list">
+              <div class="col" id="cover-track-list"></div>
+              <div class="col" id="track-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container-fluid" id="container-lanzamientos">
+      <div class="row">
+        <div class="col">
+          <div class="container-data" id="container-data-lanzamientos"></div>
+        </div>
+      </div>
+    </section>
+    <div class="paginar" id="btns-pag-categories">
+      <button class="btn btn-primary" id="btnAnterior">Anterior</button>
+      <button class="btn btn-primary" id="btnSiguiente">Siguiente</button>
+    </div>
+
+
+    <section class="container-fluid" id="contariner-buscador">
       <div class="row">
         <div class="col">
           <form action="" id="formSearch">
@@ -48,31 +81,12 @@
             <input type="text" class="inputs opcional" placeholder="Genero (Opcional)" name="genero"><br>
             <button type="submit" class="btn btn-primary" id="btn-submit"><i class="bi bi-search">  Buscar</i></button><br>
           </form>
+          <div class="container-data" id="container-result"></div>
+          <div class="container-tracks" id="container-result-tracks"></div>
         </div>
       </div>
-    </div>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col">
-          <div class="container-data" id="container-data"></div>
-          <div class="paginar" id="btns-pag-categories">
-              <button class="btn btn-primary" id="btnAnterior">Anterior</button>
-              <button class="btn btn-primary" id="btnSiguiente">Siguiente</button>
-          </div>
-          <div class="paginar" id="btns-page-playlist">
-            <button class="btn btn-info" id="btnAnteriorPlay">Anterior</button>
-            <button class="btn btn-info" id="btnSiguientePlay">Siguiente</button>
-          </div>
-          <div class="container-data" id="container-resul"></div>
-        </div>
-      </div>
-    </div>
-    <div class="container-fluid">
-      <div class="row" id="container-track-list">
-        <div class="col" id="cover-track-list"></div>
-        <div class="col" id="track-list"></div>
-      </div>
-    </div>
+    </section>
+ 
     <!-- <section class="player">
       <div class="header">
         <a href="#" class="button">

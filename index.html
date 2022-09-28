@@ -25,8 +25,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link" href="#categories" id="navCategorie" onclick="getCategorias()">Categorias</a>
-            <a class="nav-link" href="#" id="navLanzamientos" onclick="getLanzamientos()">Lanzamientos</a>
+            <a class="nav-link" href="#categories" id="navCategorie" onclick="categorias()">Categorias</a>
+            <a class="nav-link" href="#" id="navLanzamientos" onclick="lanzamientos()">Lanzamientos</a>
             <a class="nav-link" href="#" id="navBuscador" onclick="showSearch()">Buscador</a>
           </div>
         </div>
@@ -38,16 +38,15 @@
     <section class="container-fluid" id="container-categoria">
       <div class="row">
         <div class="col">
+          <h1 class="titulos">Categorias Musicales</h1>
           <div class="container-data" id="container-data-categoria"></div>
-          <div class="paginar" id="btns-page-playlist">
-            <button class="btn btn-info" id="btnAnteriorPlay">Anterior</button>
-            <button class="btn btn-info" id="btnSiguientePlay">Siguiente</button>
+          <div class="paginar" id="btns-pag-categories">
+            <button class="btn btn-primary" id="btnAnteriorCat">Anterior</button>
+            <button class="btn btn-primary" id="btnSiguienteCat">Siguiente</button>
           </div>
-          <div class="container-fluid">
-            <div class="row" id="container-track-list">
-              <div class="col" id="cover-track-list"></div>
-              <div class="col" id="track-list"></div>
-            </div>
+          <div id="container-track-list">
+            <div class="col" id="cover-track-list"></div>
+            <div class="col" id="track-list"></div>
           </div>
         </div>
       </div>
@@ -56,25 +55,33 @@
     <section class="container-fluid" id="container-lanzamientos">
       <div class="row">
         <div class="col">
+          <h1 class="titulos">Lanzamientos</h1>
           <div class="container-data" id="container-data-lanzamientos"></div>
         </div>
       </div>
+      <div class="paginar" id="btns-page-releases">
+        <button class="btn btn-info" id="btnAnteriorReleases">Anterior</button>
+        <button class="btn btn-info" id="btnSiguienteReleases">Siguiente</button>
+      </div>
     </section>
-    <div class="paginar" id="btns-pag-categories">
-      <button class="btn btn-primary" id="btnAnterior">Anterior</button>
-      <button class="btn btn-primary" id="btnSiguiente">Siguiente</button>
-    </div>
-
-
-    <section class="container-fluid" id="contariner-buscador">
+    
+      
+    <section class="container-fluid" id="container-buscador">
       <div class="row">
         <div class="col">
+          <h1 class="titulos">Buscador</h1>
+          <h4>Puede restringir tu búsqueda utilizando los filtros (álbum, artista, pista, año, y género). <br>
+            Cada filtro de campo solo se aplica a ciertos tipos de resultados.
+              Los filtros de artista y año se pueden usar al buscar álbumes, artistas y pistas. <br>
+              Puede filtrar por un solo año o un rango (por ejemplo, 1955-1960).<br>
+              El filtro de género se puede utilizar al buscar artistas y pistas.
+          </h4>
           <form action="" id="formSearch">
             <label>Album</label>
             <input type="radio" name="type" id="type-album" value="album">
             <label>Artista</label>
             <input type="radio" name="type" id="type-artist" value="artist">
-            <label>Canción</label>
+            <label>Pista</label>
             <input type="radio" name="type" id="type-track" value="track">
             <input type="text" class="inputs" placeholder="Buscar.." name="search" id="input-search"><br>
             <input type="text" class="inputs opcional" placeholder="Año (Opcional)" name="año">
@@ -83,6 +90,10 @@
           </form>
           <div class="container-data" id="container-result"></div>
           <div class="container-tracks" id="container-result-tracks"></div>
+          <div class="paginar" id="btns-pag-search">
+            <button class="btn btn-primary" id="btnAnteriorSearch">Anterior</button>
+            <button class="btn btn-primary" id="btnSiguienteSearch">Siguiente</button>
+          </div>
         </div>
       </div>
     </section>

@@ -1,4 +1,24 @@
-const form = document.getElementById("formSearch");
+class Usuario{
+    constructor (username, generoFav, periodoFav){
+      this.username = username;
+      this.generoFav = generoFav;
+      this.periodoFav = periodoFav;
+      this.urlQuery = `https://api.spotify.com/v1/search?q=%20year:${periodoFav}%20genre:${generoFav}&type=artist&limit=30`;
+    }
+
+    //Metodos
+
+    get user(){
+      return this.username;
+    }
+
+    recomendar(){
+      search(this.urlQuery);
+    }
+}
+
+const formSearch = document.getElementById("formSearch");
+const formUser = document.getElementById("formUser");
 const inputSearch = document.getElementById("input-search");
 const artistInput = document.getElementById("type-artist");
 const albumInput = document.getElementById("type-album");
@@ -9,6 +29,9 @@ const containerDataCategoria = document.getElementById("container-data-categoria
 const containerLanzamientos = document.getElementById("container-lanzamientos");
 const containerDataLanzamientos = document.getElementById("container-data-lanzamientos");
 const containerTracksList = document.getElementById("container-track-list");
+const containerRecommendation = document.getElementById("container-recommendation");
+const containerDataRecommendation = document.getElementById("container-data-recommendation");
+const containerTitle = document.getElementById("title-recommendation");
 
 const containerSearch = document.getElementById("container-buscador");
 const containerResulSearh =  document.getElementById("container-result");
@@ -16,6 +39,7 @@ const containerResultTracks = document.getElementById("container-result-tracks")
 
 const btnSiguienteCat = document.getElementById("btnSiguienteCat");
 const btnAnteriorCat = document.getElementById("btnAnteriorCat");
+const btnsPageReleases = document.getElementById("btns-page-releases");
 const btnSiguienteReleases = document.getElementById("btnSiguienteReleases");
 const btnAnteriorReleases = document.getElementById("btnAnteriorReleases");
 const btnSiguienteSearch = document.getElementById("btnSiguienteSearch");
@@ -23,14 +47,14 @@ const btnAteriorSearch = document.getElementById("btnAnteriorSearch");
 
 const navBuscador = document.getElementById("navBuscador");
 
-let categorie;
+let isCategorie;
+let isRecommendation = true;
 const urlBase = "https://api.spotify.com/v1/";
-let urlCategorie = urlBase + "browse/categories?country=US&limit=12";
-let urlLazamientos = urlBase + "browse/new-releases?limit=12";
+const urlCategorie = urlBase + "browse/categories?country=US&limit=12";
+const urlLazamientos = urlBase + "browse/new-releases?limit=12";
 
 let urlNext;
 let urlPrevious;
-
 
 // Call the API
 
@@ -59,7 +83,7 @@ const getToken = async () => {
       // Log any errors
       console.log("something went wrong", err);
     });
-};
+}
 
 function showAlbums(data) {
   containerResultTracks.style.display = "none";
@@ -100,6 +124,27 @@ function showTracks (data){
               </div>`
   })
   containerResultTracks.innerHTML = tracks;
+}
+
+function showRecomendation (data){
+    console.log(data);
+    containerRecommendation.style.display = "block";
+    containerLanzamientos.style.display = "none";
+    containerCategoria.style.display = "none";
+    containerSearch.style.display = "none"
+    containerResulSearh.style.display = "none";
+    containerTracksList.style.display = "none";
+    containerResultTracks.style.display = "none";
+    array = data.artists.items.sort(() => Math.random() - 0.5)
+    let cover = "";
+    array.forEach(item => {
+      cover += `<div class='artista'>
+                  <img class="cover" src='${item?.images[1]?.url}'>
+                  <h6>${item.name}</h6>
+                </div>`;
+    });
+    containerDataRecommendation.innerHTML =  cover;
+    
 }
 
 const getPlaylist = async () => {
@@ -156,7 +201,7 @@ const getPlaylistByCategoria = async (urlPlaylist) => {
   })
   .then(function (data) {
     console.log(data);
-    categorie = false;
+    isCategorie = false;
     urlNext = data?.playlists?.next;
     urlPrevious = data?.playlists?.previous;
     let coverPlaylists = "";
@@ -187,12 +232,13 @@ const getCategorias = async (url) => {
 	return resp.json();
   })
   .then(function (data) {
-    categorie = true;
+    isCategorie = true;
     containerTracksList.style.display = "none";
     containerCategoria.style.display = "block";
     containerLanzamientos.style.display = "none";
     containerSearch.style.display = "none";
     containerResulSearh.style.display = "none";
+    containerRecommendation.style.display = "none";
     let coverCategorie = "";
     urlNext = data?.categories?.next;
     urlPrevious = data?.categories?.previous;
@@ -256,10 +302,12 @@ const getLanzamientos = async (urlLazamientos) => {
   })
   .then(function (data) {
     containerLanzamientos.style.display = "block";
+    btnsPageReleases.style.display = "block";
     containerCategoria.style.display = "none";
     containerSearch.style.display = "none"
     containerResulSearh.style.display = "none";
     containerTracksList.style.display = "none";
+    containerRecommendation.style.display = "none";
     urlNext = data?.albums.next;
     urlPrevious = data?.albums.previous;
     console.log(data);
@@ -309,11 +357,15 @@ const search = async (urlSearch) => {
       }else if (data?.artists){
         urlNext = data?.artists?.next;
         urlPrevious = data?.artists?.previous;
-        Toastify({
+        if (isRecommendation){
+          showRecomendation(data);
+        }else{
+          Toastify({
           text: "Cantidad de resultados que coincinciden con tu busquedad: " + data?.artists?.total,
           duration: 5000
           }).showToast();
-        showArtists(data);
+          showArtists(data); 
+        }
       }else{
         urlNext = data?.tracks?.next;
         urlPrevious = data?.tracks?.previous;
@@ -330,7 +382,7 @@ const search = async (urlSearch) => {
 
 btnSiguienteCat.addEventListener('click', () => {
   if (urlNext != null){
-    if (categorie){
+    if (isCategorie){
       getCategorias(urlNext)
     }else{
       getPlaylistByCategoria(urlNext);
@@ -340,7 +392,7 @@ btnSiguienteCat.addEventListener('click', () => {
 
 btnAnteriorCat.addEventListener('click', () => {
   if (urlPrevious != null){
-    if (categorie){
+    if (isCategorie){
       getCategorias(urlPrevious);
     }else{
       getPlaylistByCategoria(urlPrevious);
@@ -369,19 +421,21 @@ function showSearch (){
   containerCategoria.style.display = "none";
   containerLanzamientos.style.display = "none";
   containerTracksList.style.display = "none"; 
+  containerRecommendation.style.display = "none";
+  containerResulSearh.innerHTML = " ";
 }
 
 function formQuerySearch (){
   let year;
   let genre;
-  form.año.value ? year = "%20year:" + form.año.value : year = " ";
-  form.genero.value ? genre = "%20genre:" + form.genero.value : genre = " ";
+  formSearch.año.value ? year = "%20year:" + formSearch.año.value : year = " ";
+  formSearch.genero.value ? genre = "%20genre:" + formSearch.genero.value : genre = " ";
   if (trackInput.checked == true) {
-    search (urlBase + "search?q=" + form.search.value + year + genre + "&type=track");
+    search (urlBase + "search?q=" + formSearch.search.value + year + genre + "&type=track");
   } else if (albumInput.checked == true) {
-    search(urlBase + "search?q=" + form.search.value + year + genre + "&type=album");
+    search(urlBase + "search?q=" + formSearch.search.value + year + genre + "&type=album");
   } else {
-    search(urlBase + "search?q=" + form.search.value + year + genre + "&type=artist");
+    search(urlBase + "search?q=" + formSearch.search.value + year + genre + "&type=artist");
   }
 }
 
@@ -393,12 +447,27 @@ function categorias (){
   getCategorias(urlCategorie);
 }
 
-form.addEventListener("submit", (e) => {
+formUser.addEventListener("submit", (e) => {
   e.preventDefault();
+  const usuario1 = new Usuario (formUser.username.value, formUser.genero.value, formUser.periodo.value);
+  console.log(usuario1.user);
+  usuario1.recomendar();
+  formUser.style.display = "none";
+  containerTitle.innerHTML = `<h1 class="titulos">Especial para ${usuario1.user}</h1>`;
+})
+
+formSearch.addEventListener("submit", (e) => {
+  e.preventDefault();
+  isRecommendation = false;
   formQuerySearch();
 })
 
 window.onload = () =>{
   getToken();
+  containerLanzamientos.style.display = "none";
+  containerCategoria.style.display = "none";
+  containerSearch.style.display = "none"
+  containerResulSearh.style.display = "none";
+  containerTracksList.style.display = "none";
 }
-getCategorias(urlCategorie);
+

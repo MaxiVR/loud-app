@@ -18,7 +18,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">LOUD</a>
+        <a class="navbar-brand">LOUD</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -33,7 +33,25 @@
       </div>
     </nav>
   </header>
+  
   <main>
+    <section class="container-fluid" id="container-recommendation">
+      <div class="row">
+        <div class="col">
+          <div id="title-recommendation">
+             <h1 class="titulos" >Bienvenido!!!<br></h1> 
+              <h3>Si buscas una recomendación especial completá los siguientes datos</h3>
+          </div>
+          <form class="form"  id="formUser">
+            <input type="text" class="inputs" placeholder="Username" name="username" id="input-search"><br>
+            <input type="text" class="inputs opcional" placeholder="Año o Periodo" name="periodo">
+            <input type="text" class="inputs opcional" placeholder="Genero Favorito" name="genero"><br>
+            <button type="submit" form="formUser" class="btn btn-primary" id="btn-submit">Let's Goo!!!!</button><br>
+          </form>
+          <div class="container-data" id="container-data-recommendation"></div>
+        </div>
+      </div>
+    </section>
 
     <section class="container-fluid" id="container-categoria">
       <div class="row">
@@ -71,12 +89,12 @@
         <div class="col">
           <h1 class="titulos">Buscador</h1>
           <h4>Puede restringir tu búsqueda utilizando los filtros (álbum, artista, pista, año, y género). <br>
-            Cada filtro de campo solo se aplica a ciertos tipos de resultados.
+              Cada filtro de campo solo se aplica a ciertos tipos de resultados.
               Los filtros de artista y año se pueden usar al buscar álbumes, artistas y pistas. <br>
               Puede filtrar por un solo año o un rango (por ejemplo, 1955-1960).<br>
               El filtro de género se puede utilizar al buscar artistas y pistas.
           </h4>
-          <form action="" id="formSearch">
+          <form class="form" id="formSearch">
             <label>Album</label>
             <input type="radio" name="type" id="type-album" value="album">
             <label>Artista</label>
@@ -86,7 +104,7 @@
             <input type="text" class="inputs" placeholder="Buscar.." name="search" id="input-search"><br>
             <input type="text" class="inputs opcional" placeholder="Año (Opcional)" name="año">
             <input type="text" class="inputs opcional" placeholder="Genero (Opcional)" name="genero"><br>
-            <button type="submit" class="btn btn-primary" id="btn-submit"><i class="bi bi-search">  Buscar</i></button><br>
+            <button type="submit" form="formSearch" class="btn btn-primary" id="btn-submit"><i class="bi bi-search">  Buscar</i></button><br>
           </form>
           <div class="container-data" id="container-result"></div>
           <div class="container-tracks" id="container-result-tracks"></div>

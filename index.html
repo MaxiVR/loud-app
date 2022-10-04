@@ -25,6 +25,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
+            <a class="nav-link" href="#" id="navRecomendation" onclick="recomendation()">Para Ti</a>
             <a class="nav-link" href="#categories" id="navCategorie" onclick="categorias()">Categorias</a>
             <a class="nav-link" href="#" id="navLanzamientos" onclick="lanzamientos()">Lanzamientos</a>
             <a class="nav-link" href="#" id="navBuscador" onclick="showSearch()">Buscador</a>
@@ -49,6 +50,7 @@
             <button type="submit" form="formUser" class="btn btn-primary" id="btn-submit">Let's Goo!!!!</button><br>
           </form>
           <div class="container-data" id="container-data-recommendation"></div>
+          <div class="container-data" id="container-tracks-recommendation"></div>
         </div>
       </div>
     </section>
@@ -101,7 +103,7 @@
             <input type="radio" name="type" id="type-artist" value="artist">
             <label>Pista</label>
             <input type="radio" name="type" id="type-track" value="track">
-            <input type="text" class="inputs" placeholder="Buscar.." name="search" id="input-search"><br>
+            <input type="text" class="inputs" placeholder="Ingrese artista, album o canción" name="search" id="input-search"><br>
             <input type="text" class="inputs opcional" placeholder="Año (Opcional)" name="año">
             <input type="text" class="inputs opcional" placeholder="Genero (Opcional)" name="genero"><br>
             <button type="submit" form="formSearch" class="btn btn-primary" id="btn-submit"><i class="bi bi-search">  Buscar</i></button><br>
@@ -115,6 +117,18 @@
         </div>
       </div>
     </section>
+
+    <div class="container-fluid">
+      <footer class="d-flex flex-wrap justify-content-between align-items-center my-4 border-top">
+        <p class="col-md-4 mb-0 text-muted">&copy; Created by Maximiliano Vazquez 2022</p>
+        <ul class="nav">
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-muted" onclick="recomendation()">Para Ti</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-muted" onclick="categorias()">Categorias</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-muted" onclick="lanzamientos()">Lanzamientos</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-muted" onclick="showSearch()">Buscador</a></li>
+        </ul>
+      </footer>
+    </div>
  
     <!-- <section class="player">
       <div class="header">

@@ -9,7 +9,7 @@
 body{
     background-image:  linear-gradient(to top, #434343 0%, black 100%);
     background-attachment: fixed;
-    color: rgb(144 113 254);
+    color: rgb(97 54 249)
 }
 
 #navbar{
@@ -33,6 +33,10 @@ h4{
     border-radius: 10%;
     border-style: solid;
     border-color: blanchedalmond;
+}
+
+.tracks{
+    cursor: pointer;
 }
 
 #container-track-list{
@@ -61,16 +65,12 @@ ol{
     border-style: double;
 }
 
-ul{
-    border-style: double;
-}
-
 a{
     font-family: Frijole, cursive;
 }
 
 h1{
-    font-size: 5em;
+    font-size: 4em;
     font-family: Frijole, cursive;
 }
 
@@ -131,14 +131,22 @@ h6{
 }
 
 .inputs{
-    border-radius: 10px;
     padding: 10px;
     margin-bottom: 10px;
-    background-color: rgb(7 96 46);
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: rgb(7 96 46 / 0%);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+.inputs:focus{
+    outline: none;
 }
 
 .inputs::placeholder{
-    color: black;
+    color: rgba(221, 0, 0, 0.247);
     font-weight: bold;
 }
 
@@ -156,10 +164,15 @@ h6{
     width: 100%;
 }
 
-ul{
+.info-album{
+    border-style: double;
     text-transform: capitalize;
     font-size: x-large;
     font-weight: bold;
+}
+
+.text-muted{
+    font-size: smaller;
 }
 
 /* :root {
@@ -337,7 +350,7 @@ a {
 } */
 
 
-@media (max-width: 850px){
+@media (max-width: 1024px){
 
     .container-data{
         grid-template-columns: repeat(3, 1fr);
@@ -347,11 +360,18 @@ a {
         grid-template-columns: repeat(2, 1fr);
     }
     
-    
 }
-@media (max-width: 650px){
+@media (max-width: 768px){
 
     .container-data{
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    h6{
+        width: 150px;
+    }
+    
+    h1{
+        font-size: 2.5em;
     }
 }    

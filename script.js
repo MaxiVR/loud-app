@@ -31,6 +31,7 @@ const containerDataLanzamientos = document.getElementById("container-data-lanzam
 const containerTracksList = document.getElementById("container-track-list");
 const containerRecommendation = document.getElementById("container-recommendation");
 const containerDataRecommendation = document.getElementById("container-data-recommendation");
+const containerTracksRecommendation = document.getElementById("container-tracks-recommendation");
 const containerTitle = document.getElementById("title-recommendation");
 
 const containerSearch = document.getElementById("container-buscador");
@@ -85,28 +86,26 @@ const getToken = async () => {
     });
 }
 
+function createHTML (item){
+  let cover = `<div class='artista'>
+                <img class="cover" id="${item?.id}" src='${item?.images[1]?.url}'>
+                <h6>${item?.name}</h6>
+              </div>`;
+  return cover;
+}
+
 function showAlbums(data) {
   containerResultTracks.style.display = "none";
-  let cover = "";
-  data.albums.items.forEach(item => {
-    cover += `<div class='artista'>
-                <img class="cover" src='${item?.images[1]?.url}'>
-                <h6>${item.name}</h6>
-              </div>`;
-  });
-  containerResulSearh.innerHTML = cover;
+  let covers = "";
+  data?.albums?.items.forEach(item => {covers += createHTML(item)});
+  containerResulSearh.innerHTML = covers;
 }
 
 function showArtists(data) {
   containerResultTracks.style.display = "none";
-  let cover = "";
-  data.artists.items.forEach(item => {
-    cover += `<div class='artista'>
-                <img class="cover" src='${item?.images[1]?.url}'>
-                <h6>${item.name}</h6>
-              </div>`;
-  });
-  containerResulSearh.innerHTML = cover;
+  let covers = "";
+  data?.artists?.items.forEach(item => {covers += createHTML(item)});
+  containerResulSearh.innerHTML = covers;
 }
 
 function showTracks (data){
@@ -127,7 +126,6 @@ function showTracks (data){
 }
 
 function showRecomendation (data){
-    console.log(data);
     containerRecommendation.style.display = "block";
     containerLanzamientos.style.display = "none";
     containerCategoria.style.display = "none";
@@ -135,16 +133,55 @@ function showRecomendation (data){
     containerResulSearh.style.display = "none";
     containerTracksList.style.display = "none";
     containerResultTracks.style.display = "none";
-    array = data.artists.items.sort(() => Math.random() - 0.5)
     let cover = "";
-    array.forEach(item => {
-      cover += `<div class='artista'>
-                  <img class="cover" src='${item?.images[1]?.url}'>
-                  <h6>${item.name}</h6>
-                </div>`;
-    });
-    containerDataRecommendation.innerHTML =  cover;
-    
+    data.artists.items.forEach(item => {cover += createHTML(item)});
+    containerDataRecommendation.innerHTML = cover;
+    const artist = document.querySelectorAll(".artista");
+    for (let i = 0; i < artist.length; i++) {
+        artist[i].addEventListener("click", (e) => {
+        getArtistTopTracks(urlBase + `artists/${e.target.id}/top-tracks?market=AR`);
+      })
+    }
+}
+
+function recomendation(){
+  containerRecommendation.style.display = "block";
+  containerDataRecommendation.style.display = "grid";
+  containerTracksRecommendation.style.display = "none";
+  containerLanzamientos.style.display = "none";
+  containerCategoria.style.display = "none";
+  containerSearch.style.display = "none"
+  containerResulSearh.style.display = "none";
+  containerTracksList.style.display = "none";
+}
+
+const getArtistTopTracks = async (url) => {
+  fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      'Authorization': "Bearer " + window.localStorage.getItem('token'),
+      'Host': "api.spotify.com",
+    }
+  }).then(function (resp){
+	return resp.json();
+  })
+  .then(function (data) {
+    let tracksHTML = "";
+    containerDataRecommendation.style.display = "none";
+    console.log(data);
+    data?.tracks.forEach(item => {
+    tracksHTML += `<div class="tracks" id='${item?.id}'>
+                    <img class="cover track"  src='${item?.album?.images[2]?.url}'><h7>${item?.name}</h7><br>
+                    <audio controls class="preview-track">
+                        <source src="${item?.preview_url}" type="audio/mpeg">
+                        Tu navegador no soporta elementos de audio.
+                    </audio>
+                  </div>`
+    })
+    containerTracksRecommendation.innerHTML = tracksHTML;
+    containerTracksRecommendation.style.display = "grid";
+  })
 }
 
 const getPlaylist = async () => {
@@ -258,6 +295,7 @@ const getCategorias = async (url) => {
   })
 }
 
+
 const getAlbum = async (idAlbum) => {
   fetch(`https://api.spotify.com/v1/albums/${idAlbum}`, {
     method: "GET",
@@ -274,7 +312,7 @@ const getAlbum = async (idAlbum) => {
     let coverAlbum = `<div class=" categoria">
                           <img  class="img-fluid" src='${data?.images[0]?.url}'>
                       </div>
-                      <ul>
+                      <ul class="info-album">
                         <li>Artista: ${data?.artists[0]?.name}</li>
                         <li>Album/Simple: ${data?.name}</li>
                         <li>Fecha De Lanzamiento: ${data?.release_date}</li>
